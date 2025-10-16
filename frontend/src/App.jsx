@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import ReactMarkdown from "react-markdown";
 
 function App() {
   const [message, setMessage] = useState("");
@@ -11,7 +12,10 @@ function App() {
     if (!message) return;
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/api/chat", { message });
+      const res = await axios.post(
+        "https://pathshalaai-9n5y.onrender.com/api/chat/",
+        { message }
+      );
       setResponse(res.data.response);
     } catch (err) {
       console.error(err);
@@ -64,19 +68,20 @@ function App() {
 
           <button
             onClick={handleSend}
-            className="mt-4 w-full py-3 text-black  bg-pink-500 hover:bg-pink-600 rounded-md font-bold transition-all duration-300"
+            className="mt-4 w-full py-3 text-black bg-pink-500 hover:bg-pink-600 rounded-md font-bold transition-all duration-300"
           >
             {loading ? "Thinking..." : "Send"}
           </button>
 
           {response && (
             <motion.div
-              className="mt-6 p-4 bg-gray-700 rounded-md text-gray-200"
+              className="mt-6 p-4 bg-gray-700 rounded-xl text-gray-200 prose prose-invert max-w-full overflow-x-auto"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <strong>AI:</strong> {response}
+              <strong>AI:</strong>
+              <ReactMarkdown>{response}</ReactMarkdown>
             </motion.div>
           )}
         </motion.div>
